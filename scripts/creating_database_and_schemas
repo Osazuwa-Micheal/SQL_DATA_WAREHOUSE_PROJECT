@@ -1,0 +1,51 @@
+/*
+---------------------------------------------------------
+ Script Name  : create_data_warehouse.sql
+ Purpose      : Create the "data_warehouse" database in PostgreSQL
+ Author       : Osazuwa Micheal Kelvin
+ Warning      : Run while connected to the 'postgres' database
+---------------------------------------------------------
+*/
+
+-- Ensure the dblink extension is available for cross-database commands
+-- dblink lets you run SQL commands across different databases in the same PostgreSQL server.
+-- We use it here because you can’t run CREATE DATABASE inside a DO block directly — so we “ask” the postgres database to run it using dblink_exec.
+
+CREATE EXTENSION IF NOT EXISTS dblink;
+
+-- Check if the database exists; create it if it doesn’t
+DO
+$$
+BEGIN
+   IF NOT EXISTS (
+      SELECT FROM pg_database WHERE datname = 'data_warehouse'
+   ) THEN
+      PERFORM dblink_exec('dbname=postgres', 'CREATE DATABASE data_warehouse');
+      RAISE NOTICE 'Database "data_warehouse" created successfully.';
+   ELSE
+      RAISE NOTICE 'Database "data_warehouse" already exists.';
+   END IF;
+END
+$$ LANGUAGE plpgsql;
+
+-- Connect to the newly created database manually by selecting the   
+
+-- Create schemas if they don't exist
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'bronze') THEN
+      EXECUTE 'CREATE SCHEMA bronze';
+   END IF;
+
+   IF NOT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'silver') THEN
+      EXECUTE 'CREATE SCHEMA silver';
+   END IF;
+
+   IF NOT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'gold') THEN
+      EXECUTE 'CREATE SCHEMA gold';
+   END IF;
+
+   RAISE NOTICE 'Schemas bronze, silver, and gold verified or created.';
+END
+$$ LANGUAGE plpgsql;
