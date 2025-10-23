@@ -1,20 +1,23 @@
 -- ================================================
--- Script: Bulk Insert Data into bronze.crm_cust_info
--- Purpose: To load customer data from a CSV file in my local storage 
---          into the bronze layer of the data warehouse and verify data
--- 			completeness.
+-- Script: Bulk Insert Data into bronze Layer 
+-- Purpose: Load data into bronze schema from CSV files,
+-- show the flow of execution and catch errors.
 -- Author: Osazuwa Micheal Kelvin
 -- ================================================
 
--- Step 1: Ensure you are connected to the correct database
+-- Ensure correct database
 -- \c data_warehouse;
 
--- Step 2: Copy data from local CSV into the table
--- NOTE: The path must be accessible by the PostgreSQL server.
---       If you're using pgAdmin locally, ensure the path is correct and use double backslashes (\\).
---       The CSV file must have the same column order as the table definition.
+-- ============================================================
+-- Load bronze.crm_cust_info
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.crm_cust_info...';
 
-TRUNCATE bronze.crm_cust_info; --  Truncate (clear) all data from the table before inserting.
+TRUNCATE bronze.crm_cust_info;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.crm_cust_info (
     cst_id,
     cst_key,
@@ -25,18 +28,26 @@ COPY bronze.crm_cust_info (
     cst_create_date
 )
 FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\cust_info.csv'
-WITH (
-    FORMAT CSV,          -- Specifies the file format
-    HEADER TRUE,         -- Skips the first line (column names)
-    DELIMITER ',',       -- Columns are separated by commas
-    NULL '',             -- Treat empty fields as NULL
-    ENCODING 'UTF8'      -- Ensures proper character encoding
-);
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
--- Check how many rows were inserted
--- SELECT COUNT(*) FROM bronze.crm_prd_info;
+RAISE NOTICE '✅ Data successfully loaded into bronze.crm_cust_info.';
 
-TRUNCATE bronze.crm_prd_info; --  Truncate (clear) all data from the table before inserting.
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.crm_cust_info: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- Load bronze.crm_prd_info
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.crm_prd_info...';
+
+TRUNCATE bronze.crm_prd_info;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.crm_prd_info (
     prd_id,
     prd_key,
@@ -47,16 +58,26 @@ COPY bronze.crm_prd_info (
     prd_end_dt
 )
 FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\prd_info.csv'
-WITH (
-    HEADER TRUE,         -- Skips the first line (column names)
-    DELIMITER ',',       -- Columns are separated by commas
-    NULL '',             -- Treat empty fields as NULL
-    ENCODING 'UTF8'      -- Ensures proper character encoding
-);
--- Check how many rows were inserted
--- SELECT COUNT(*) FROM bronze.crm_prd_info;
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
-TRUNCATE bronze.crm_sales_details; --  Truncate (clear) all data from the table before inserting.
+RAISE NOTICE '✅ Data successfully loaded into bronze.crm_prd_info.';
+
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.crm_prd_info: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- Load bronze.crm_sales_details
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.crm_sales_details...';
+
+TRUNCATE bronze.crm_sales_details;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.crm_sales_details (
     sls_ord_num,
     sls_prd_key,
@@ -69,69 +90,97 @@ COPY bronze.crm_sales_details (
     sls_price
 )
 FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\sales_details.csv'
-WITH (
-    FORMAT CSV,          -- File is in CSV format
-    HEADER TRUE,         -- Skip the first row (column names)
-    DELIMITER ',',       -- Columns separated by commas
-    NULL '',             -- Empty strings treated as NULL
-    ENCODING 'UTF8'      -- Supports UTF-8 encoded characters
-);
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
--- Check how many rows were inserted
--- SELECT COUNT(*) FROM bronze.crm_sales_details;
+RAISE NOTICE '✅ Data successfully loaded into bronze.crm_sales_details.';
 
-TRUNCATE bronze.erp_cust_az12; --  Truncate (clear) all data from the table before inserting.
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.crm_sales_details: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- Load bronze.erp_cust_az12
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.erp_cust_az12...';
+
+TRUNCATE bronze.erp_cust_az12;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.erp_cust_az12 (
     CID,
     BDATE,
     GEN
 )
-FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
-WITH (
-    FORMAT CSV,          -- The input file is in CSV format
-    HEADER TRUE,         -- The first line of the file contains column names
-    DELIMITER ',',       -- Columns are separated by commas
-    NULL '',             -- Empty strings in CSV are treated as NULL values
-    ENCODING 'UTF8'      -- Ensures proper handling of character encoding
-);
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_erp\\CUST_AZ12.csv'
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
--- Verify that the data was successfully loaded
--- SELECT COUNT(*) FROM bronze.erp_cust_az12;
+RAISE NOTICE '✅ Data successfully loaded into bronze.erp_cust_az12.';
 
-TRUNCATE bronze.erm_loc_a101; --  Truncate (clear) all data from the table before inserting.
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.erp_cust_az12: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- Load bronze.erm_loc_a101
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.erm_loc_a101...';
+
+TRUNCATE bronze.erm_loc_a101;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.erm_loc_a101 (
     CID,
     CNTRY
 )
-FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
-WITH(    
-	FORMAT CSV,          -- The file format is CSV
-    HEADER TRUE,         -- Skip the header row
-    DELIMITER ',',       -- Use comma as column separator
-    NULL '',             -- Empty values in CSV are treated as NULL
-    ENCODING 'UTF8'      -- Ensures proper character encoding
-);
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_erp\\LOC_A101.csv'
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
--- Verify successful load
--- Count the number of records loaded
--- SELECT COUNT(*) FROM bronze.erm_loc_a101;
+RAISE NOTICE '✅ Data successfully loaded into bronze.erm_loc_a101.';
 
-TRUNCATE bronze.erm_px_cat_g1v2; --  Truncate (clear) all data from the table before inserting.
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.erm_loc_a101: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- Load bronze.erm_px_cat_g1v2
+-- ============================================================
+DO $$
+BEGIN
+RAISE NOTICE 'Starting data load for bronze.erm_px_cat_g1v2...';
+
+TRUNCATE bronze.erm_px_cat_g1v2;
+RAISE NOTICE 'Table truncated successfully.';
+
 COPY bronze.erm_px_cat_g1v2 (
     ID,
     CAT,
     SUBCAT,
     MAINTENANCE
 )
-FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
-WITH (
-    FORMAT CSV,          -- File format is CSV
-    HEADER TRUE,         -- Skip the first row (column names)
-    DELIMITER ',',       -- Columns are separated by commas
-    NULL '',             -- Empty values treated as NULL
-    ENCODING 'UTF8'      -- Supports proper character encoding
-);
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_erp\\PX_CAT_G1V2.csv'
+WITH (FORMAT CSV, HEADER TRUE, DELIMITER ',', NULL '', ENCODING 'UTF8');
 
--- Verify data load
--- Count number of records inserted
--- SELECT COUNT(*) FROM bronze.erm_px_cat_g1v2;
+RAISE NOTICE '✅ Data successfully loaded into bronze.erm_px_cat_g1v2.';
+
+
+EXCEPTION
+WHEN OTHERS THEN
+RAISE WARNING '⚠️ Error loading bronze.erm_px_cat_g1v2: %', SQLERRM;
+END $$;
+
+-- ============================================================
+-- FINAL VERIFICATION
+-- ============================================================
+DO $$
+RAISE NOTICE 'All data load steps executed. Verify row counts as needed.'
+END $$;
