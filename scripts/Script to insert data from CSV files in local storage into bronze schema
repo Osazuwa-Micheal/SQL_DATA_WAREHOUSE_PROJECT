@@ -1,0 +1,137 @@
+-- ================================================
+-- Script: Bulk Insert Data into bronze.crm_cust_info
+-- Purpose: To load customer data from a CSV file in my local storage 
+--          into the bronze layer of the data warehouse and verify data
+-- 			completeness.
+-- Author: Osazuwa Micheal Kelvin
+-- ================================================
+
+-- Step 1: Ensure you are connected to the correct database
+-- \c data_warehouse;
+
+-- Step 2: Copy data from local CSV into the table
+-- NOTE: The path must be accessible by the PostgreSQL server.
+--       If you're using pgAdmin locally, ensure the path is correct and use double backslashes (\\).
+--       The CSV file must have the same column order as the table definition.
+
+TRUNCATE bronze.crm_cust_info; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.crm_cust_info (
+    cst_id,
+    cst_key,
+    cst_firstname,
+    cst_lastname,
+    cst_marital_status,
+    cst_gndr,
+    cst_create_date
+)
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\cust_info.csv'
+WITH (
+    FORMAT CSV,          -- Specifies the file format
+    HEADER TRUE,         -- Skips the first line (column names)
+    DELIMITER ',',       -- Columns are separated by commas
+    NULL '',             -- Treat empty fields as NULL
+    ENCODING 'UTF8'      -- Ensures proper character encoding
+);
+
+-- Check how many rows were inserted
+-- SELECT COUNT(*) FROM bronze.crm_prd_info;
+
+TRUNCATE bronze.crm_prd_info; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.crm_prd_info (
+    prd_id,
+    prd_key,
+    prd_nm,
+    prd_cost,
+    prd_line,
+    prd_start_dt,
+    prd_end_dt
+)
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\prd_info.csv'
+WITH (
+    HEADER TRUE,         -- Skips the first line (column names)
+    DELIMITER ',',       -- Columns are separated by commas
+    NULL '',             -- Treat empty fields as NULL
+    ENCODING 'UTF8'      -- Ensures proper character encoding
+);
+-- Check how many rows were inserted
+-- SELECT COUNT(*) FROM bronze.crm_prd_info;
+
+TRUNCATE bronze.crm_sales_details; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.crm_sales_details (
+    sls_ord_num,
+    sls_prd_key,
+    sls_cust_id,
+    sls_order_dt,
+    sls_ship_dt,
+    sls_due_dt,
+    sls_sales,
+    sls_quantity,
+    sls_price
+)
+FROM 'C:\\Users\\MICHAEL VOLT\\Downloads\\sql-data-warehouse-project\\sql-data-warehouse-project\\datasets\\source_crm\\sales_details.csv'
+WITH (
+    FORMAT CSV,          -- File is in CSV format
+    HEADER TRUE,         -- Skip the first row (column names)
+    DELIMITER ',',       -- Columns separated by commas
+    NULL '',             -- Empty strings treated as NULL
+    ENCODING 'UTF8'      -- Supports UTF-8 encoded characters
+);
+
+-- Check how many rows were inserted
+-- SELECT COUNT(*) FROM bronze.crm_sales_details;
+
+TRUNCATE bronze.erp_cust_az12; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.erp_cust_az12 (
+    CID,
+    BDATE,
+    GEN
+)
+FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+WITH (
+    FORMAT CSV,          -- The input file is in CSV format
+    HEADER TRUE,         -- The first line of the file contains column names
+    DELIMITER ',',       -- Columns are separated by commas
+    NULL '',             -- Empty strings in CSV are treated as NULL values
+    ENCODING 'UTF8'      -- Ensures proper handling of character encoding
+);
+
+-- Verify that the data was successfully loaded
+-- SELECT COUNT(*) FROM bronze.erp_cust_az12;
+
+TRUNCATE bronze.erm_loc_a101; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.erm_loc_a101 (
+    CID,
+    CNTRY
+)
+FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+WITH(    
+	FORMAT CSV,          -- The file format is CSV
+    HEADER TRUE,         -- Skip the header row
+    DELIMITER ',',       -- Use comma as column separator
+    NULL '',             -- Empty values in CSV are treated as NULL
+    ENCODING 'UTF8'      -- Ensures proper character encoding
+);
+
+-- Verify successful load
+-- Count the number of records loaded
+-- SELECT COUNT(*) FROM bronze.erm_loc_a101;
+
+TRUNCATE bronze.erm_px_cat_g1v2; --  Truncate (clear) all data from the table before inserting.
+COPY bronze.erm_px_cat_g1v2 (
+    ID,
+    CAT,
+    SUBCAT,
+    MAINTENANCE
+)
+FROM 'C:\Users\MICHAEL VOLT\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
+WITH (
+    FORMAT CSV,          -- File format is CSV
+    HEADER TRUE,         -- Skip the first row (column names)
+    DELIMITER ',',       -- Columns are separated by commas
+    NULL '',             -- Empty values treated as NULL
+    ENCODING 'UTF8'      -- Supports proper character encoding
+);
+
+-- Verify data load
+-- Count number of records inserted
+-- SELECT COUNT(*) FROM bronze.erm_px_cat_g1v2;
