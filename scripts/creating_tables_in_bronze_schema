@@ -40,18 +40,18 @@ CREATE TABLE IF NOT EXISTS bronze.crm_sales_details (
 );
 
 CREATE TABLE IF NOT EXISTS bronze.erp_cust_az12 (
-    CID   INT,          -- Customer ID (unique numeric identifier)
+    CID   TEXT,          -- Customer ID (unique numeric identifier)
     BDATE DATE,         -- Customer Birth Date
     GEN   VARCHAR(6)    -- Gender 
 );
 
 CREATE TABLE IF NOT EXISTS bronze.erm_loc_a101 (
-    CID   INT,           -- Customer ID 
+    CID   TEXT,           -- Customer ID 
     CNTRY VARCHAR(50)    -- Country name 
 );
 
 CREATE TABLE IF NOT EXISTS bronze.erm_px_cat_g1v2 (
-    ID            INT,            -- Unique identifier for each record
+    ID            TEXT,            -- Unique identifier for each record
     CAT           VARCHAR(50),    -- Main product category 
     SUBCAT        VARCHAR(50),    -- Subcategory under the main category 
     MAINTENANCE   VARCHAR(30)     -- Maintenance type or requirement
