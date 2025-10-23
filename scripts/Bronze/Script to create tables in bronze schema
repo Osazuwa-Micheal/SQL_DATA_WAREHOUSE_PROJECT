@@ -1,1 +1,58 @@
+-- ================================================
+-- Script: Create six tables in the bronze schema
+-- Purpose: To store data
+-- Author: Osazuwa Micheal Kelvin
+-- ================================================
 
+-- Ensure that the 'bronze' schema exists before creating the table
+CREATE SCHEMA IF NOT EXISTS bronze;
+
+CREATE TABLE IF NOT EXISTS bronze.crm_cust_info (
+cst_id INT, 					-- Unique numeric ID for each customer
+cst_key VARCHAR(20), 			-- Optional key or reference code for the customer
+cst_firstname VARCHAR(20), 		-- Customer's first name
+cst_lastname VARCHAR(20), 	    -- Customer's last name
+cst_marital_status VARCHAR(6),  -- Marital status (e.g., 'Single', 'Married')
+cst_gndr VARCHAR(6), 			-- Gender (e.g., 'Male', 'Female')
+cst_create_date DATE 			-- Date the customer record was created
+);
+
+CREATE TABLE IF NOT EXISTS bronze.crm_prd_info (
+    prd_id INT,                 -- Unique product ID (integer)
+    prd_key VARCHAR(20),        -- Unique product key or code
+    prd_nm VARCHAR(50),         -- Product name
+    prd_cost INT,     			 -- Product cost 
+    prd_line VARCHAR(30),       -- Product line or category
+    prd_start_dt DATE,          -- Product start/launch date
+    prd_end_dt DATE             -- Product end/discontinuation date
+);
+
+CREATE TABLE IF NOT EXISTS bronze.crm_sales_details (
+    sls_ord_num VARCHAR(20),       -- Unique sales order number
+    sls_prd_key VARCHAR(20),       -- Product key 
+    sls_cust_id INT,               -- Customer ID 
+    sls_order_dt DATE,             -- Date when the order was placed
+    sls_ship_dt DATE,              -- Date when the order was shipped
+    sls_due_dt DATE,               -- Due date for order delivery or payment
+    sls_sales INT,       			-- Total sales amount 
+    sls_quantity INT,              -- Quantity of product sold
+    sls_price NUMERIC(10,2)        -- Unit price of the product
+);
+
+CREATE TABLE IF NOT EXISTS bronze.erp_cust_az12 (
+    CID   TEXT,          -- Customer ID (unique numeric identifier)
+    BDATE DATE,         -- Customer Birth Date
+    GEN   VARCHAR(6)    -- Gender 
+);
+
+CREATE TABLE IF NOT EXISTS bronze.erm_loc_a101 (
+    CID   TEXT,           -- Customer ID 
+    CNTRY VARCHAR(50)    -- Country name 
+);
+
+CREATE TABLE IF NOT EXISTS bronze.erm_px_cat_g1v2 (
+    ID            TEXT,            -- Unique identifier for each record
+    CAT           VARCHAR(50),    -- Main product category 
+    SUBCAT        VARCHAR(50),    -- Subcategory under the main category 
+    MAINTENANCE   VARCHAR(30)     -- Maintenance type or requirement
+);
