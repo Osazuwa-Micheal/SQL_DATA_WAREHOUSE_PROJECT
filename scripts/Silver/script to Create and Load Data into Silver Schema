@@ -1,15 +1,16 @@
 -- ============================================================
 -- Script: Optimized Create, Clean, and Load Data into Silver Schema
--- Purpose: 
---   • Create the silver schema and six refined tables.
---   • Load curated data from the bronze layer into the silver layer.
---   • Perform data cleaning and advanced transformations including:
---       - Trimming of string fields.
---       - Standardization of categorical codes (gender, marital status, etc.).
---       - Null value handling and replacement.
---       - Logical correction of numerical inconsistencies.
---       - Computation of derived columns (e.g., product end date).
---   • Log load durations for each table.
+-- Purpose:
+-- • Create the silver schema and six refined tables.
+-- • Load curated data from the bronze layer into the silver layer.
+-- • Perform data cleaning and advanced transformations including:
+-- - Trimming of string fields.
+-- - Standardization of categorical codes (gender, marital status, etc.).
+-- - Null value handling and replacement.
+-- - Logical correction of numerical inconsistencies.
+-- - Computation of derived columns (e.g., product end date).
+-- • Log load durations for each table.
+-- • Log truncation actions before each table load.
 -- Author: Osazuwa Micheal Kelvin
 -- ============================================================
 
@@ -91,6 +92,7 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.crm_cust_info...';
 TRUNCATE silver.crm_cust_info;
+RAISE NOTICE '🧹 Table silver.crm_cust_info truncated before loading.';
 
 INSERT INTO silver.crm_cust_info (
     cst_id, cst_key, cst_firstname, cst_lastname,
@@ -133,6 +135,7 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.crm_prd_info...';
 TRUNCATE silver.crm_prd_info;
+RAISE NOTICE '🧹 Table silver.crm_prd_info truncated before loading.';
 
 INSERT INTO silver.crm_prd_info (
     prd_id, cat_id, prd_key, prd_nm, prd_cost, prd_line, prd_start_dt, prd_end_dt
@@ -168,6 +171,7 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.crm_sales_details...';
 TRUNCATE silver.crm_sales_details;
+RAISE NOTICE '🧹 Table silver.crm_sales_details truncated before loading.';
 
 INSERT INTO silver.crm_sales_details (
     sls_ord_num, sls_prd_key, sls_cust_id,
@@ -221,6 +225,7 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.erp_cust_az12...';
 TRUNCATE silver.erp_cust_az12;
+RAISE NOTICE '🧹 Table silver.erp_cust_az12 truncated before loading.';
 
 INSERT INTO silver.erp_cust_az12 (cid, bdate, gen)
 SELECT
@@ -246,16 +251,17 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.erm_loc_a101...';
 TRUNCATE silver.erm_loc_a101;
+RAISE NOTICE '🧹 Table silver.erm_loc_a101 truncated before loading.';
 
 INSERT INTO silver.erm_loc_a101 (cid, cntry)
 SELECT 
     COALESCE(TRIM(REPLACE(cid, '-', '')), 'N/A') AS cid,
     CASE
-		WHEN TRIM(cntry) = 'DE' THEN 'Germany'
-		WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
-		WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'N/A'
-		ELSE TRIM(cntry)
-	END AS cntry
+        WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+        WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+        WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'N/A'
+        ELSE TRIM(cntry)
+    END AS cntry
 FROM bronze.erm_loc_a101;
 
 duration := EXTRACT(EPOCH FROM clock_timestamp() - start_time);
@@ -272,6 +278,7 @@ duration NUMERIC;
 BEGIN
 RAISE NOTICE '🚀 Loading silver.erm_px_cat_g1v2...';
 TRUNCATE silver.erm_px_cat_g1v2;
+RAISE NOTICE '🧹 Table silver.erm_px_cat_g1v2 truncated before loading.';
 
 INSERT INTO silver.erm_px_cat_g1v2 (id, cat, subcat, maintenance)
 SELECT
