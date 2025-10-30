@@ -249,8 +249,8 @@ TRUNCATE silver.erm_loc_a101;
 
 INSERT INTO silver.erm_loc_a101 (cid, cntry)
 SELECT 
-    COALESCE(TRIM(cid), 'N/A'),
-    TRIM(cntry)
+    COALESCE(TRIM(REPLACE(cid, '-', '')), 'N/A') AS cid,
+    TRIM(cntry) AS country_cleaned
 FROM bronze.erm_loc_a101;
 
 duration := EXTRACT(EPOCH FROM clock_timestamp() - start_time);
