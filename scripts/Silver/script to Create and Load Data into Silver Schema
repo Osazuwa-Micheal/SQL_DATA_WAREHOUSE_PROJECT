@@ -228,7 +228,7 @@ SELECT
     CASE 
         WHEN bdate >= CURRENT_DATE THEN NULL
         ELSE bdate
-    END AS bdate,,
+    END AS bdate,
     gen
 FROM bronze.erp_cust_az12;
 
