@@ -186,7 +186,6 @@ SELECT
     sls_ship_dt,
     sls_due_dt,
 
-    -- Clean sls_sales
     CASE 
         WHEN sls_sales IS NULL THEN ABS(sls_quantity * sls_price)
         WHEN sls_sales < 0 THEN ABS(sls_sales)
@@ -196,14 +195,12 @@ SELECT
         ELSE sls_sales
     END AS sls_sales,
 
-    -- Clean sls_quantity
     CASE 
         WHEN sls_quantity IS NULL THEN ABS(sls_sales / NULLIF(sls_price, 0))
         WHEN sls_quantity < 0 THEN ABS(sls_quantity)
         ELSE sls_quantity
     END AS sls_quantity,
 
-    -- Clean sls_price
     CASE 
         WHEN sls_price IS NULL THEN ABS(sls_sales / NULLIF(sls_quantity, 0))
         WHEN sls_price < 0 THEN ABS(sls_price)
@@ -235,11 +232,11 @@ SELECT
         ELSE bdate
     END AS bdate,
     CASE
-		WHEN TRIM(gen) = 'M' THEN 'Male'
-		WHEN TRIM(gen) = 'F' THEN 'Female'
-		WHEN TRIM(gen) ='' OR TRIM(gen) IS NULL THEN 'N/A'
-		ELSE TRIM(gen)
-	END gen
+        WHEN TRIM(gen) = 'M' THEN 'Male'
+        WHEN TRIM(gen) = 'F' THEN 'Female'
+        WHEN TRIM(gen) = '' OR TRIM(gen) IS NULL THEN 'N/A'
+        ELSE TRIM(gen)
+    END gen
 FROM bronze.erp_cust_az12;
 
 duration := EXTRACT(EPOCH FROM clock_timestamp() - start_time);
@@ -248,17 +245,17 @@ RAISE NOTICE '✅ silver.erp_cust_az12 loaded (%.2f sec)', duration;
 
 END $$;
 
--- ================= ERM LOCATION A101 =======================
+-- ================= ERP LOCATION A101 =======================
 DO $$
 DECLARE
 start_time TIMESTAMP := clock_timestamp();
 duration NUMERIC;
 BEGIN
-RAISE NOTICE '🚀 Loading silver.erm_loc_a101...';
-TRUNCATE silver.erm_loc_a101;
-RAISE NOTICE '🧹 Table silver.erm_loc_a101 truncated before loading.';
+RAISE NOTICE '🚀 Loading silver.erp_loc_a101...';
+TRUNCATE silver.erp_loc_a101;
+RAISE NOTICE '🧹 Table silver.erp_loc_a101 truncated before loading.';
 
-INSERT INTO silver.erm_loc_a101 (cid, cntry)
+INSERT INTO silver.erp_loc_a101 (cid, cntry)
 SELECT 
     COALESCE(TRIM(REPLACE(cid, '-', '')), 'N/A') AS cid,
     CASE
@@ -267,34 +264,34 @@ SELECT
         WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'N/A'
         ELSE TRIM(cntry)
     END AS cntry
-FROM bronze.erm_loc_a101;
+FROM bronze.erp_loc_a101;
 
 duration := EXTRACT(EPOCH FROM clock_timestamp() - start_time);
-RAISE NOTICE '✅ silver.erm_loc_a101 loaded (%.2f sec)', duration;
+RAISE NOTICE '✅ silver.erp_loc_a101 loaded (%.2f sec)', duration;
 
 
 END $$;
 
--- ================= ERM PRODUCT CATEGORY G1V2 =======================
+-- ================= ERP PRODUCT CATEGORY G1V2 =======================
 DO $$
 DECLARE
 start_time TIMESTAMP := clock_timestamp();
 duration NUMERIC;
 BEGIN
-RAISE NOTICE '🚀 Loading silver.erm_px_cat_g1v2...';
-TRUNCATE silver.erm_px_cat_g1v2;
-RAISE NOTICE '🧹 Table silver.erm_px_cat_g1v2 truncated before loading.';
+RAISE NOTICE '🚀 Loading silver.erp_px_cat_g1v2...';
+TRUNCATE silver.erp_px_cat_g1v2;
+RAISE NOTICE '🧹 Table silver.erp_px_cat_g1v2 truncated before loading.';
 
-INSERT INTO silver.erm_px_cat_g1v2 (id, cat, subcat, maintenance)
+INSERT INTO silver.erp_px_cat_g1v2 (id, cat, subcat, maintenance)
 SELECT
     TRIM(id),
     TRIM(cat),
     TRIM(subcat),
     TRIM(maintenance)
-FROM bronze.erm_px_cat_g1v2;
+FROM bronze.erp_px_cat_g1v2;
 
 duration := EXTRACT(EPOCH FROM clock_timestamp() - start_time);
-RAISE NOTICE '✅ silver.erm_px_cat_g1v2 loaded (%.2f sec)', duration;
+RAISE NOTICE '✅ silver.erp_px_cat_g1v2 loaded (%.2f sec)', duration;
 
 
 END $$;
