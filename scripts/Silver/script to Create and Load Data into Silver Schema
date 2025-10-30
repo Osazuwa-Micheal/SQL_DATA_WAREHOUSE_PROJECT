@@ -1,6 +1,15 @@
 -- ============================================================
--- Script: Optimized Create and Load Data into Silver Schema
--- Purpose: Create six tables in silver schema and load data
+-- Script: Optimized Create, Clean, and Load Data into Silver Schema
+-- Purpose: 
+--   • Create the silver schema and six refined tables.
+--   • Load curated data from the bronze layer into the silver layer.
+--   • Perform data cleaning and advanced transformations including:
+--       - Trimming of string fields.
+--       - Standardization of categorical codes (gender, marital status, etc.).
+--       - Null value handling and replacement.
+--       - Logical correction of numerical inconsistencies.
+--       - Computation of derived columns (e.g., product end date).
+--   • Log load durations for each table.
 -- Author: Osazuwa Micheal Kelvin
 -- ============================================================
 
