@@ -1,0 +1,35 @@
+-- ============================================================
+-- Script: Create Gold Layer View - dim_customers
+-- Purpose:
+-- • To build a unified customer dimension view in the Gold layer.
+-- • Combines and enriches customer data from multiple Silver tables:
+--      - silver.crm_cust_info (core customer attributes)
+--      - silver.erp_cust_az12 (birthdate and gender enrichment)
+--      - silver.erp_loc_a101 (location details)
+-- • Ensures completeness by filling missing gender data from ERP sources.
+-- • Adds a surrogate key (customer_key) for dimensional consistency.
+-- Author: Osazuwa Micheal Kelvin
+-- ============================================================
+
+CREATE VIEW gold.dim_customers AS
+
+SELECT
+    ROW_NUMBER() OVER(ORDER BY cst_id) AS customer_key,      -- Surrogate key for dimension table
+    ci.cst_id AS customer_id,                                -- Original customer ID
+    ci.cst_key AS customer_number,                           -- Business key 
+    ci.cst_firstname AS firstname,                           -- Customer first name
+    ci.cst_lastname AS lastname,                             -- Customer last name
+    la.cntry AS country,                                     -- Country from ERP location table
+    ci.cst_marital_status AS marital_status,                 -- Marital status
+    CASE 
+        WHEN ci.cst_gndr IS NULL OR ci.cst_gndr = 'N/A' THEN ca.gen
+        ELSE ci.cst_gndr
+    END AS gender,                                           -- Gender 
+    ca.bdate AS birthdate,                                   -- Birth date from ERP
+    ci.cst_create_date AS date_created                       -- Date when record was created
+    
+FROM silver.crm_cust_info ci
+LEFT JOIN silver.erp_cust_az12 ca 
+    ON ci.cst_key = ca.cid
+LEFT JOIN silver.erp_loc_a101 la 
+    ON ci.cst_key = la.cid;
