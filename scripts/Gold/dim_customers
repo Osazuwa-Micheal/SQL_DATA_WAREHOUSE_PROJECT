@@ -22,9 +22,9 @@ SELECT
     la.cntry AS country,                                     -- Country from ERP location table
     ci.cst_marital_status AS marital_status,                 -- Marital status
     CASE 
-        WHEN ci.cst_gndr IS NULL OR ci.cst_gndr = 'N/A' THEN ca.gen
-        ELSE ci.cst_gndr
-    END AS gender,                                           -- Gender 
+		WHEN ci.cst_gndr != 'N/A' THEN ca.gen
+		ELSE COALESCE(ca.gen, 'N/A')
+	END AS gender,                                         -- Gender 
     ca.bdate AS birthdate,                                   -- Birth date from ERP
     ci.cst_create_date AS date_created                       -- Date when record was created
     
