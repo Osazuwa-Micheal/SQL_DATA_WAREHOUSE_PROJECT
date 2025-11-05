@@ -1,0 +1,31 @@
+-- ============================================================
+-- Script: Create Gold Layer View - dim_products
+-- Purpose:
+-- • To build a clean and enriched product dimension view in the Gold layer.
+-- • Combines product details from multiple Silver tables:
+--      - silver.crm_prd_info (core product data)
+--      - silver.erp_px_cat_g1v2 (category and maintenance enrichment)
+-- • Provides standardized product attributes for analytics and reporting.
+-- • Filters out discontinued or historical products (prd_end_dt IS NULL).
+-- • Adds a surrogate key (product_key) for dimensional modeling.
+-- Author: Osazuwa Micheal Kelvin
+-- ============================================================
+
+CREATE VIEW gold.dim_products AS
+SELECT
+    ROW_NUMBER() OVER(ORDER BY pi.prd_start_dt, pi.prd_key) AS product_key,  -- Surrogate product key
+    pi.prd_id AS product_id,                                                 -- Product ID from CRM
+    pi.prd_key AS product_number,                                            -- Product business key
+    pi.cat_id AS category_id,                                                -- Category foreign key reference
+    pcg.cat AS category,                                                     -- Category name from ERP
+    pcg.subcat AS sub_category,                                              -- Sub-category name
+    pcg.maintenance AS maintenance,                                          -- Maintenance status
+    pi.prd_nm AS product_name,                                               -- Product name
+    pi.prd_line AS product_line,                                             -- Product line
+    pi.prd_cost AS product_cost,                                             -- Product cost
+    pi.prd_start_dt AS product_start_date                                    -- launch date
+
+FROM silver.crm_prd_info pi
+LEFT JOIN silver.erp_px_cat_g1v2 pcg
+    ON pi.cat_id = pcg.id
+WHERE prd_end_dt IS NULL;  -- Filter out historical/discontinued products
