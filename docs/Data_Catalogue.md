@@ -33,7 +33,7 @@ This dimension contains personal details, demographics, and geographic informati
 | `lastname` | VARCHAR | Customer’s last name. |
 | `country` | VARCHAR | Customer’s country of residence from ERP location data. |
 | `marital_status` | VARCHAR | Marital status (e.g., Single, Married). |
-| `gender` | VARCHAR | Gender, derived from CRM or ERP (fallback if missing). |
+| `gender` | VARCHAR | Gender, derived from CRM or ERP. |
 | `birthdate` | DATE | Customer’s date of birth (from ERP system). |
 | `date_created` | DATE | Date the customer record was created in CRM. |
 
