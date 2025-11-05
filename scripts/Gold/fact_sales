@@ -1,0 +1,30 @@
+-- ============================================================
+-- Script: Create Gold Layer View - fact_sales
+-- Purpose:
+-- • To create a fact table for sales transactions in the Gold layer.
+-- • Integrates sales data from the Silver layer with product and customer dimensions.
+-- • Provides a unified structure for business intelligence and analytical reporting.
+-- • Establishes relationships between facts and dimensions:
+--      - silver.crm_sales_details → core transactional data
+--      - gold.dim_products → product dimension reference
+--      - gold.dim_customers → customer dimension reference
+-- • Enables metrics such as total sales, quantities, and pricing for analysis.
+-- Author: Osazuwa Micheal Kelvin
+-- ============================================================
+
+CREATE VIEW gold.fact_sales AS
+SELECT 
+    csd.sls_ord_num AS sales_order_number,   -- Sales order identifier
+    dp.product_key,                          -- Foreign key to product dimension
+    dc.customer_key,                         -- Foreign key to customer dimension
+    csd.sls_order_dt AS order_date,          -- Order placement date
+    csd.sls_due_dt AS due_date,              -- due date
+    csd.sls_sales AS total_sales,            -- Total sales amount
+    csd.sls_quantity AS quantity_sold,       -- Quantity sold
+    csd.sls_price AS unit_price              -- Product unit price
+
+FROM silver.crm_sales_details csd
+LEFT JOIN gold.dim_products dp
+    ON csd.sls_prd_key = dp.product_number
+LEFT JOIN gold.dim_customers dc
+    ON csd.sls_cust_id = dc.customer_key;
