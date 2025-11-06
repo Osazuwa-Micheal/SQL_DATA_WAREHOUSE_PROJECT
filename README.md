@@ -1,36 +1,112 @@
-# SQL_DATA_WAREHOUSE_PROJECT
-## Data Warehouse and Analytics Project
+# 🌍 Data Warehouse and Analytics Project
 
-Welcome to the *"Data Warehouse and Analytics Project"* repository! 🚀
-This project demonstrates a comprehensive data warehousing and analytics solution, from building a data warehouse to generating actionable insights. Designed as a portfolio project, it highlights industry best practices in data engineering and analytics.
-...
-Develop a modern data warehouse using PostgreSQL Server to consolidate sales data, enabling analytical reporting and informed decision-making.
-
-### Specifications
-* *Data Sources*: Import data from two source systems (ERP and CRM) provided as CSV files.
-* *Data Quality*: Cleanse and resolve data quality issues prior to analysis.
-* *Integration*: Combine both sources into a single, user-friendly data model designed for analytical queries.
-* *Scope*: Focus on the latest dataset only; historization of data is not required.
-* *Documentation*: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
+Welcome to the **Data Warehouse and Analytics Project** repository! 🚀  
+This project, developed by **Osazuwa Micheal Kelvin**, demonstrates a complete **data warehousing and analytics pipeline** — from raw data ingestion to business-ready insights.  
+It follows the **Medallion Architecture (Bronze → Silver → Gold)** and showcases best practices in **data engineering**, **data modeling**, and **analytical SQL development** using **PostgreSQL**.
 
 ---
 
-### Analytics & Reporting (Data Analytics)
+## 🏗️ Data Architecture
 
-#### Objective
-Develop SQL-based analytics to deliver detailed insights into:
-* *Customer Behavior*
-* *Product Performance*
-* *Sales Trends*
+The project is structured using the **Medallion Architecture** pattern for scalability, reliability, and clarity.
 
-These insights empower stakeholders with key business metrics, enabling strategic decision-making.
+![Data Architecture](docs/data_architecture.png)
+
+### 🔸 Bronze Layer
+Stores **raw data** ingested from ERP and CRM systems (CSV files).  
+This layer preserves original data for traceability and auditability.
+
+### 🔸 Silver Layer
+Performs **data transformation, standardization, and cleansing**.  
+Ensures accuracy, completeness, and consistency of data before it’s loaded into analytics models.
+
+### 🔸 Gold Layer
+Houses **business-ready data models** — fact and dimension tables — optimized for analytics and reporting.
 
 ---
 
-### License 📝
+## 📖 Project Overview
 
-This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share this project with proper attribution.
+This repository demonstrates the **end-to-end data warehouse lifecycle**, including:
+
+1. **Data Architecture** – Designing a Medallion-based PostgreSQL data warehouse.  
+2. **ETL Development** – Extracting, transforming, and loading data using SQL scripts.  
+3. **Data Modeling** – Creating star schema models for efficient analysis.  
+4. **Analytics** – Writing analytical queries for business insights.
+
+**Core Competencies:**
+- Data Engineering & ETL Development  
+- SQL Optimization & Data Modeling  
+- Data Quality Management  
+- Analytical Reporting & Visualization
 
 ---
 
-### About Me
+## 🛠️ Tools & Resources
+
+All resources and technologies used in this project are free and open-source.
+
+| Tool | Purpose |
+|------|----------|
+| **PostgreSQL** | Database engine for storage, transformation, and querying. |
+| **pgAdmin 4** | GUI for managing PostgreSQL databases and executing SQL scripts. |
+| **GitHub** | Version control and collaboration platform. |
+| **Draw.io** | Design of data architecture diagrams and schema visualizations. |
+| **Notion** | Project task management and documentation organization. |
+
+---
+
+## 🚀 Project Requirements
+
+### 🧩 Data Warehouse (Engineering Phase)
+
+**Objective:**  
+Design and implement a **PostgreSQL-based data warehouse** that integrates CRM and ERP data into a unified analytical model.
+
+**Specifications:**
+- **Data Sources:** ERP and CRM CSV datasets.  
+- **Data Quality:** Validate and clean before transformation.  
+- **Integration:** Merge both sources into unified entities.  
+- **Scope:** Latest dataset only (non-historical).  
+- **Documentation:** Full schema, metadata, and lineage provided.
+
+---
+
+### 📊 Analytics & Reporting (Analysis Phase)
+
+**Objective:**  
+Deliver meaningful business insights through analytical queries on the **Gold Layer**.
+
+**Focus Areas:**
+- Customer Demographics & Segmentation  
+- Product Performance  
+- Sales Trends & Profitability
+
+---
+
+## 📂 Repository Structure
+
+```plaintext
+data-warehouse-project/
+│
+├── datasets/                           # Raw ERP & CRM CSV files
+│
+├── docs/                               # Documentation & diagrams
+│   ├── etl.drawio                      # ETL process flow
+│   ├── data_architecture.drawio        # Architecture diagram
+│   ├── data_catalog.md                 # Dataset descriptions
+│   ├── data_flow.drawio                # Data movement flow
+│   ├── data_models.drawio              # Star schema model
+│   ├── naming-conventions.md           # Naming standards
+│
+├── scripts/                            # SQL scripts for all layers
+│   ├── bronze/                         # Extract & load raw data
+│   ├── silver/                         # Clean & transform data
+│   ├── gold/                           # Create fact & dimension tables
+│
+├── tests/                              # Quality validation queries
+│
+├── README.md                           # Main documentation (this file)
+├── LICENSE                             # Project license
+├── .gitignore                          # Git ignore rules
+└── requirements.txt                    # Environment/tool dependencies
