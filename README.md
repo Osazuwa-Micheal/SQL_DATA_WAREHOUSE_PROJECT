@@ -109,7 +109,7 @@ data-warehouse-project/
 ├── README.md                           # Main documentation (this file)
 ├── LICENSE                             # Project license
 
-
+```
 ## 🛡️ License
 
 This project is licensed under the [MIT License](LICENSE).  
