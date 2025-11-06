@@ -108,8 +108,7 @@ data-warehouse-project/
 │
 ├── README.md                           # Main documentation (this file)
 ├── LICENSE                             # Project license
-├── .gitignore                          # Git ignore rules
-└── requirements.txt                    # Environment/tool dependencies
+
 
 ## 🛡️ License
 
