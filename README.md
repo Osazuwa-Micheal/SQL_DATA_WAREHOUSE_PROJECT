@@ -109,3 +109,11 @@ data-warehouse-project/
 ├── LICENSE                             # Project license
 ├── .gitignore                          # Git ignore rules
 └── requirements.txt                    # Environment/tool dependencies
+
+## 🛡️ License
+
+This project is licensed under the [MIT License](LICENSE).  
+You are free to use, modify, and share this project with proper attribution.
+
+> **Acknowledgment:**  
+> This work was **modified and extended by Osazuwa Micheal Kelvin**, based on the original work by **Baraa Khatib Salkini (Data With Baraa)**.
