@@ -10,7 +10,7 @@ It follows the **Medallion Architecture (Bronze → Silver → Gold)** and showc
 
 The project is structured using the **Medallion Architecture** pattern for scalability, reliability, and clarity.
 
-![Data Architecture](docs/data_architecture.png)
+![Data Architecture](docs/Data Architecture.png)
 
 ### 🔸 Bronze Layer
 Stores **raw data** ingested from ERP and CRM systems (CSV files).  
