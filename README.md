@@ -97,6 +97,7 @@ data-warehouse-project/
 │   ├── data_catalog.md                 # Dataset descriptions
 │   ├── data_flow.drawio                # Data movement flow
 │   ├── Entity Relation Diagram.drawio  # Star schema model
+│   ├── naming-conventions.md           # Naming standards
 │
 ├── scripts/                            # SQL scripts for all layers
 │   ├── bronze/                         # Extract & load raw data
